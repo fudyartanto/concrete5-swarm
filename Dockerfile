@@ -23,6 +23,7 @@ RUN sed -i 's/short_open_tag = Off/; short_open_tag = Off/g' /etc/php/5.6/fpm/ph
 RUN curl -sS -k https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN mkdir /var/www/src
+RUN mkdir /src/packages
 
 # download concrete5
 RUN curl -k https://www.concrete5.org/download_file/-/view/81497/8497/ --output /var/www/src/concrete5-5.7.5.zip
@@ -128,9 +129,12 @@ RUN ln -s /var/www/src/concrete5-5.7.5 /var/www/html/php5.6 \
   && ln -s /var/www/src/concrete5-8.2.0 /var/www/html/php5.6 \
   && ln -s /var/www/src/concrete5-8.2.0 /var/www/html/php7.0
 
-RUN ln -s /src /var/www/src/concrete5-5.7.5/packages \
-  && ln -s /src /var/www/src/concrete5-8.1.0/packages \
-  && ln -s /src /var/www/src/concrete5-8.2.0/packages
+RUN rm -rf /var/www/src/concrete5-5.7.5/packages \
+  && rm -rf /var/www/src/concrete5-8.1.0/packages \
+  && rm -rf /var/www/src/concrete5-8.2.0/packages \
+  && ln -s /src/packages /var/www/src/concrete5-5.7.5 \
+  && ln -s /src/packages /var/www/src/concrete5-8.1.0 \
+  && ln -s /src/packages /var/www/src/concrete5-8.2.0
 
 RUN chmod -R 777 /var/www/src/concrete5-5.7.5/application/files \
   && chmod -R 777 /var/www/src/concrete5-5.7.5/application/config \
