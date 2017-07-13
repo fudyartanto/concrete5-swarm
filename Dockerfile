@@ -28,6 +28,7 @@ RUN mkdir /src/packages
 
 # install phantomjs
 RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 --no-check-certificate --output-document=/usr/local/share/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+  && rm /usr/local/share/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
   && tar xjf /usr/local/share/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share \
   && ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/share/phantomjs \
   && ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs \
