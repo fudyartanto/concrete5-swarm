@@ -12,6 +12,7 @@ RUN apt-get update \
     php5-curl \
     curl \
     git \
+    wget \
     unzip \
   && rm -r /var/lib/apt/lists/*
 
@@ -24,6 +25,13 @@ RUN curl -sS -k https://getcomposer.org/installer | sudo php -- --install-dir=/u
 
 RUN mkdir /var/www/src
 RUN mkdir /src/packages
+
+# install phantomjs
+RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 --no-check-certificate --output-document=/usr/local/share/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+  && tar xjf /usr/local/share/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share \
+  && ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/share/phantomjs \
+  && ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs \
+  && ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/phantomjs 
 
 # download concrete5
 RUN curl -k https://www.concrete5.org/download_file/-/view/81497/8497/ --output /var/www/src/concrete5-5.7.5.zip
@@ -147,5 +155,8 @@ RUN chmod -R 777 /var/www/src/concrete5-5.7.5/application/files \
   && chmod -R 777 /var/www/src/concrete5-8.2.0/application/files \
   && chmod -R 777 /var/www/src/concrete5-8.2.0/application/config \
   && chmod -R 777 /var/www/src/concrete5-8.2.0/packages
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+EXPOSE 8643
 
 CMD ["/usr/bin/supervisord"]
